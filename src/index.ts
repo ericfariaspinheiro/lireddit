@@ -1,18 +1,21 @@
 import { MikroORM } from "@mikro-orm/core";
-import { _prod_ } from "./constants";
+import { __prod__ } from "./constants";
 import { Post } from "./entities/Post";
 import microConfig from "./mikro-orm.config";
 
 const main = async () => {
   const orm = await MikroORM.init(microConfig);
+  await orm.getMigrator().up();
+  // const post = orm.em.create(Post, {
+  //   title: "My First Fullstack Project",
+  //   createdAt: new Date(),
+  //   updatedAt: new Date(),
+  // });
 
-  const post = orm.em.create(Post, {
-    title: "My First Fullstack Project",
-    createdAt: "",
-    updatedAt: "",
-  });
+  // await orm.em.persistAndFlush(post);
 
-  await orm.em.persistAndFlush(post);
+  const posts = await orm.em.find(Post, {});
+  console.log(posts);
 };
 
 main().catch((err) => {
